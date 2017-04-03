@@ -30,52 +30,56 @@
 
 int TestSplineDrivenImageSlicer(int argc, char** argv )
 {
-    // Create an ellipsoid
-    vtkSmartPointer<vtkImageEllipsoidSource> imgSource = vtkSmartPointer<vtkImageEllipsoidSource>::New( );
-    imgSource->SetWholeExtent( 0, 255, 0, 255, 0, 255 );
-    imgSource->SetCenter( 127, 127, 127 );
-    imgSource->SetRadius( 50, 50, 50 );
-    imgSource->Update();
-    double imgBB[6];
-    imgSource->GetOutput()->GetBounds( imgBB );
+  // Create an ellipsoid
+  vtkSmartPointer<vtkImageEllipsoidSource> imgSource =
+    vtkSmartPointer<vtkImageEllipsoidSource>::New( );
+  imgSource->SetWholeExtent( 0, 255, 0, 255, 0, 255 );
+  imgSource->SetCenter( 127, 127, 127 );
+  imgSource->SetRadius( 50, 50, 50 );
+  imgSource->Update();
+  double imgBB[6];
+  imgSource->GetOutput()->GetBounds( imgBB );
     
-    // Create a spline
-    vtkSmartPointer<vtkLineSource> linSource = vtkSmartPointer<vtkLineSource>::New( );
-    linSource->SetPoint1( imgBB[0], imgBB[2],imgBB[4]);
-    linSource->SetPoint2( imgBB[1], imgBB[3],imgBB[5]);
-    linSource->SetResolution( 20 );
+  // Create a spline
+  vtkSmartPointer<vtkLineSource> linSource =
+    vtkSmartPointer<vtkLineSource>::New( );
+  linSource->SetPoint1( imgBB[0], imgBB[2],imgBB[4]);
+  linSource->SetPoint2( imgBB[1], imgBB[3],imgBB[5]);
+  linSource->SetResolution( 20 );
 
-    // tested object
-    vtkSmartPointer<vtkSplineDrivenImageSlicer> sdis;
-    sdis = vtkSmartPointer<vtkSplineDrivenImageSlicer>::New( );
-    sdis->SetInputConnection( 0, imgSource->GetOutputPort( ));
-    sdis->SetInputConnection( 1, linSource->GetOutputPort( ));
-    sdis->SetOffsetPoint( 10 );
-    sdis->SetSliceExtent( 200, 200 );
-    sdis->SetSliceSpacing( 0.5,0.5 );
+  // tested object
+  vtkSmartPointer<vtkSplineDrivenImageSlicer> sdis =
+    vtkSmartPointer<vtkSplineDrivenImageSlicer>::New( );
+  sdis->SetInputConnection( 0, imgSource->GetOutputPort( ));
+  sdis->SetInputConnection( 1, linSource->GetOutputPort( ));
+  sdis->SetOffsetPoint( 10 );
+  sdis->SetSliceExtent( 200, 200 );
+  sdis->SetSliceSpacing( 0.5,0.5 );
 
-    sdis->Update( );
+  sdis->Update( );
   
-    // Check output scalar range:
-    double scalarRange[2];
-    sdis->GetOutput(0)->GetScalarRange(scalarRange);
-    if( scalarRange[0] != 0 || scalarRange[1] != 255 )
-       return( EXIT_FAILURE );
-    
-    // Check plane output bounds
-    static_cast<vtkPolyData*>(sdis->GetOutputDataObject(1))->ComputeBounds( );
-    double bounds[6];
-    static_cast<vtkPolyData*>(sdis->GetOutputDataObject(1))->GetBounds( bounds );
+  // Check output scalar range:
+  double scalarRange[2];
+  sdis->GetOutput(0)->GetScalarRange(scalarRange);
+  if( scalarRange[0] != 0 || scalarRange[1] != 255 )
+  {
+    return( EXIT_FAILURE );
+  } 
+  // Check plane output bounds
+  static_cast<vtkPolyData*>(sdis->GetOutputDataObject(1))->ComputeBounds( );
+  double bounds[6];
+  static_cast<vtkPolyData*>(sdis->GetOutputDataObject(1))->GetBounds( bounds );
 
-    // Bounds centroid:
-    double sum = 0;
-    for(int i = 0; i < 6; i++ )
-        sum += bounds[i]/6.0;
-   
-    double epsilon = 2;
-    if( fabs(sum - 127) > epsilon )
-        return( EXIT_FAILURE ); 
-
-    return( EXIT_SUCCESS );
+  // Bounds centroid:
+  double sum = 0;
+  for(int i = 0; i < 6; ++i )
+  {
+    sum += bounds[i]/6.0;
+  }
+  double epsilon = 2;
+  if( fabs(sum - 127) > epsilon )
+  {
+    return( EXIT_FAILURE ); 
+  }
+  return( EXIT_SUCCESS );
 }
-
