@@ -21,6 +21,7 @@
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "vtkFrenetSerretFrame.h"
+
 #include "vtkDoubleArray.h"
 #include "vtkPointData.h"
 #include "vtkMath.h"
@@ -28,7 +29,6 @@
 #include "vtkInformationVector.h"
 #include "vtkObjectFactory.h"
 
-vtkCxxRevisionMacro(vtkFrenetSerretFrame, "$Revision: 1.31 $");
 vtkStandardNewMacro(vtkFrenetSerretFrame);
 
 vtkFrenetSerretFrame::vtkFrenetSerretFrame( )

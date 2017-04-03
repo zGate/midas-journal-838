@@ -16,18 +16,20 @@
 //! \author Jerome Velut
 //! \date 6 february 2011
 
-#ifndef __vtkSplineDrivenImageSlicer_h__
-#define __vtkSplineDrivenImageSlicer_h__
+#ifndef vtkSplineDrivenImageSlicer_h
+#define vtkSplineDrivenImageSlicer_h
 
 #include"vtkImageAlgorithm.h"
 
 class vtkFrenetSerretFrame;
 class vtkImageReslice;
 
-class VTK_EXPORT vtkSplineDrivenImageSlicer : public vtkImageAlgorithm
+#include "SplineDrivenImageSlicerModule.h" // For export macro
+
+class SPLINEDRIVENIMAGESLICER_EXPORT vtkSplineDrivenImageSlicer : public vtkImageAlgorithm
 {
 public:
-   vtkTypeRevisionMacro(vtkSplineDrivenImageSlicer,vtkImageAlgorithm);
+   vtkTypeMacro(vtkSplineDrivenImageSlicer,vtkImageAlgorithm);
    static vtkSplineDrivenImageSlicer* New();
 
   //! Specify the path represented by a vtkPolyData wich contains PolyLines
@@ -39,8 +41,8 @@ public:
   vtkAlgorithmOutput* GetPathConnection( )
                                  {return( this->GetInputConnection( 1, 0 ) );};
 
-   vtkSetVector2Macro( SliceExtent, vtkIdType );
-   vtkGetVector2Macro( SliceExtent, vtkIdType );
+   vtkSetVector2Macro( SliceExtent, int );
+   vtkGetVector2Macro( SliceExtent, int );
 
    vtkSetVector2Macro( SliceSpacing, double );
    vtkGetVector2Macro( SliceSpacing, double );
@@ -67,20 +69,20 @@ protected:
    ~vtkSplineDrivenImageSlicer();
 
    virtual int RequestData(vtkInformation *, vtkInformationVector **, 
-	                                         vtkInformationVector *);
+	                                         vtkInformationVector *) VTK_OVERRIDE;
 
-   virtual int FillInputPortInformation(int port, vtkInformation *info);
-   virtual int FillOutputPortInformation( int, vtkInformation*);
+   virtual int FillInputPortInformation(int port, vtkInformation *info) VTK_OVERRIDE;
+   virtual int FillOutputPortInformation( int, vtkInformation*) VTK_OVERRIDE;
    virtual int RequestInformation(vtkInformation*, vtkInformationVector**, 
-	                                                vtkInformationVector*);
+	                                                vtkInformationVector*) VTK_OVERRIDE;
 private:
-   vtkSplineDrivenImageSlicer(const vtkSplineDrivenImageSlicer&);  // Not implemented.
-   void operator=(const vtkSplineDrivenImageSlicer&);  // Not implemented.
+   vtkSplineDrivenImageSlicer(const vtkSplineDrivenImageSlicer&) VTK_DELETE_FUNCTION;
+   void operator=(const vtkSplineDrivenImageSlicer&) VTK_DELETE_FUNCTION;
 
    vtkFrenetSerretFrame* localFrenetFrames; //!< computes local tangent along path input
    vtkImageReslice* reslicer; //!< Reslicers array
 
-   vtkIdType SliceExtent[2]; //!< Number of pixels nx, ny in the slice space around the center points
+   int     SliceExtent[2]; //!< Number of pixels nx, ny in the slice space around the center points
    double SliceSpacing[2]; //!< Pixel size sx, sy of the output slice
    double SliceThickness; //!< Slice thickness (useful for volumic reconstruction) 
    double Incidence; //!< Rotation of the initial normal vector.

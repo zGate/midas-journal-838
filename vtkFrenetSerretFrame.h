@@ -35,23 +35,16 @@
 //! \author Jerome Velut
 //! \date 21 jan 2010
 
-#ifndef __VTKFRENETSERRETFRAME_H__
-#define __VTKFRENETSERRETFRAME_H__
+#ifndef vtkFrenetSerretFrame_h
+#define vtkFrenetSerretFrame_h
 
-#include"vtkPoints.h"
-#include"vtkPolyDataAlgorithm.h"
-#include"vtkPolyData.h"
-#include"vtkCellArray.h"
+#include "SplineDrivenImageSlicerModule.h" // For export macro
+#include "vtkPolyDataAlgorithm.h"
 
-#if defined(NO_DLL)  && defined (WIN32)
-#undef VTK_EXPORT
-#define VTK_EXPORT
-#endif
-
-class VTK_EXPORT vtkFrenetSerretFrame : public vtkPolyDataAlgorithm
+class SPLINEDRIVENIMAGESLICER_EXPORT vtkFrenetSerretFrame : public vtkPolyDataAlgorithm
 {
 public:
-    vtkTypeRevisionMacro(vtkFrenetSerretFrame,vtkPolyDataAlgorithm);
+    vtkTypeMacro(vtkFrenetSerretFrame,vtkPolyDataAlgorithm);
     static vtkFrenetSerretFrame* New();
 
     //! Set ConsistentNormals to 1 if you want your frames to be 'smooth'.
@@ -82,8 +75,8 @@ protected:
     vtkFrenetSerretFrame();
     ~vtkFrenetSerretFrame();
 
-    virtual int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *);
-    virtual int FillInputPortInformation(int port, vtkInformation *info);
+    virtual int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) VTK_OVERRIDE;
+    virtual int FillInputPortInformation(int port, vtkInformation *info) VTK_OVERRIDE;
 
     //! Computes the derivative between 2 points (Next - Last).
     //! \param [in] pointIdNext {give first point Id}
@@ -113,8 +106,8 @@ protected:
                                          double *lastNormal,
                                          double* normal );
 private:
-    vtkFrenetSerretFrame(const vtkFrenetSerretFrame&);  // Not implemented.
-    void operator=(const vtkFrenetSerretFrame&);  // Not implemented.
+    vtkFrenetSerretFrame(const vtkFrenetSerretFrame&) VTK_DELETE_FUNCTION;
+    void operator=(const vtkFrenetSerretFrame&) VTK_DELETE_FUNCTION;
 
     int ComputeBinormal; //!< If 1, a Binormal array is added to the output
     int ConsistentNormals; //!< Boolean. If 1, successive normals are computed

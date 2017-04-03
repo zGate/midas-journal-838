@@ -44,7 +44,7 @@ int TestArray( vtkPolyDataAlgorithm* algo,const char* name )
    return( EXIT_SUCCESS );
 }
 
-int main(int argc, char** argv )
+int TestFrenetSerretFrame(int argc, char** argv )
 {
     // Generate a circle:
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New( );
@@ -53,7 +53,7 @@ int main(int argc, char** argv )
     vtkIdType ptId;
     for( int i = 0; i < 360; i++)
     {
-       ptId = points->InsertNextPoint( cos( i*2*vtkMath::DoublePi()/360.0 ), sin( i*2*vtkMath::DoublePi()/360.0 ), 0 );
+       ptId = points->InsertNextPoint( cos( i*2*vtkMath::Pi() * 2.0/360.0 ), sin( i*2*vtkMath::Pi() * 2.0/360.0 ), 0 );
        line->InsertCellPoint( ptId );
     }
 
@@ -66,7 +66,7 @@ int main(int argc, char** argv )
     vtkSmartPointer<vtkFrenetSerretFrame> frenetSerretFilter;
     frenetSerretFilter = vtkSmartPointer<vtkFrenetSerretFrame>::New( );
     
-    frenetSerretFilter->SetInput( circle );
+    frenetSerretFilter->SetInputData( circle );
     frenetSerretFilter->Update( );
 
     // Roughly check the result
