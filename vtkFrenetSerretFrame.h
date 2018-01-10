@@ -64,6 +64,9 @@ public:
   vtkSetMacro( ViewUp, double );
   vtkGetMacro( ViewUp, double );
 
+  vtkSetVector3Macro( DefaultVector, double );
+  vtkGetVector3Macro( DefaultVector, double );
+
   //! Rotate a vector around an axis
   //! \param [in] axis {Vector defining the axis to turn around.}
   //! \param [in] angle {Rotation angle in radian.}
@@ -115,6 +118,7 @@ private:
   //!< \see ComputeConsistentNormalVectors
   double ViewUp; //!< Define the inclination of the normal vectors in case of
   //!< ConsistentNormals is On
+  double DefaultVector[3];
 };
 
 #endif //__VTKFRENETSERRETFRAME_H__

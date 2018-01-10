@@ -36,6 +36,9 @@ vtkFrenetSerretFrame::vtkFrenetSerretFrame( )
   this->ConsistentNormals = 1;
   this->ComputeBinormal = 1;
   this->ViewUp = 0;
+  this->DefaultVector[0] = 1;
+  this->DefaultVector[1] = 0;
+  this->DefaultVector[2] = 0;
 }
 
 vtkFrenetSerretFrame::~vtkFrenetSerretFrame( )
@@ -218,8 +221,9 @@ void vtkFrenetSerretFrame::ComputeNormalVectors( double* tgNext,
   } 
   if( vtkMath::Norm(normal) == 0 ) // tgNext == tgLast
   {
-    double unit[3] = {1,0,0};
-    vtkMath::Cross( tgLast, unit, normal );
+//    double unit[3] = {1,0,0};
+//    vtkMath::Cross( tgLast, unit, normal );
+    vtkMath::Cross( tgLast, this->DefaultVector, normal );
   }
        
 }
